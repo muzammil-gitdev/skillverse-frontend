@@ -20,6 +20,7 @@ function SignUpDetailsContent() { // Create a separate component for the content
     const searchParams = useSearchParams();
     const [formData, setFormData] = useState({
         name: searchParams.get("name") || "",
+        username: "",
         email: searchParams.get("email") || "",
         dob: searchParams.get("dob") || "",
         country: "",
@@ -74,6 +75,19 @@ function SignUpDetailsContent() { // Create a separate component for the content
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-4">
 
+                            {/* Username */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                <input
+                                    type="text"
+                                    className="input-field"
+                                    required
+                                    placeholder="johndoe123"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                />
+                            </div>
+
                             {/* Location: Country */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
@@ -126,8 +140,8 @@ function SignUpDetailsContent() { // Create a separate component for the content
                                                 type="button"
                                                 onClick={() => handleSoftwareToggle(tool)}
                                                 className={`px-3 py-1.5 text-sm rounded-full border transition-all ${formData.software.includes(tool)
-                                                        ? "bg-[#1dbf73] text-white border-[#1dbf73]"
-                                                        : "bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300"
+                                                    ? "bg-[#1dbf73] text-white border-[#1dbf73]"
+                                                    : "bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-300"
                                                     }`}
                                             >
                                                 {tool}

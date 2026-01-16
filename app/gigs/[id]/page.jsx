@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
+import Image from "next/image";
 
 // Mock data for packages (remains the same as it's static structure for now)
 const PACKAGES = [
@@ -35,47 +36,31 @@ function GigDetailsContent() {
     const params = useParams();
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState(1); // 0: Basic, 1: Standard, 2: Premium
-    const [gig, setGig] = useState(null);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Construct gig object from URL query params if available
-        const gigFromQuery = {
-            id: params.id,
-            title: searchParams.get('title'),
-            description: searchParams.get('description'),
-            author: {
-                name: searchParams.get('userName'),
-                avatar: searchParams.get('userAvatar'),
-                rating: searchParams.get('rating') || 4.9, // Default/Mock if missing
-                reviews: searchParams.get('reviews') || 128,
+    // Construct gig object directly from URL query params
+    const gig = {
+        id: params.id,
+        title: searchParams.get('title'),
+        description: searchParams.get('description'),
+        author: {
+            name: searchParams.get('userName'),
+            avatar: searchParams.get('userAvatar'),
+            rating: searchParams.get('rating') || 4.9, // Default/Mock if missing
+            reviews: searchParams.get('reviews') || 128,
 
-                // Mock data for extended author info (URL doesn't carry this yet)
-                role: "Full Stack Developer",
-                location: "United States",
-                memberSince: "May 2021",
-                avgResponseTime: "1 Hour"
-            },
-            images: [
-                searchParams.get('thumbnail') || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
-            ],
-            rating: searchParams.get('rating') || 4.9,
-            reviewsCount: searchParams.get('reviews') || 128
-        };
-
-        setGig(gigFromQuery);
-        setLoading(false);
-
-    }, [params.id, searchParams]);
-
-    if (loading) {
-        return (
-            <div className="page-wrapper flex items-center justify-center">
-                <p className="text-gray-500">Loading gig details...</p>
-            </div>
-        );
-    }
+            // Mock data for extended author info (URL doesn't carry this yet)
+            role: "Full Stack Developer",
+            location: "United States",
+            memberSince: "May 2021",
+            avgResponseTime: "1 Hour"
+        },
+        images: [
+            searchParams.get('thumbnail') || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+        ],
+        rating: searchParams.get('rating') || 4.9,
+        reviewsCount: searchParams.get('reviews') || 128
+    };
 
     if (!gig || !gig.title) {
         return (
@@ -101,10 +86,12 @@ function GigDetailsContent() {
                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">{gig.title}</h1>
                             <div className="flex items-center gap-4 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-6">
                                 <div className="flex items-center gap-2">
-                                    <img
+                                    <Image
                                         src={gig.author.avatar}
                                         alt={gig.author.name}
-                                        className="w-8 h-8 rounded-full object-cover"
+                                        width={32}
+                                        height={32}
+                                        className="rounded-full object-cover"
                                     />
                                     <span className="font-bold text-gray-900">{gig.author.name}</span>
                                 </div>
@@ -121,9 +108,11 @@ function GigDetailsContent() {
 
                         {/* Gallery (Simple for now) */}
                         <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                            <img
+                            <Image
                                 src={gig.images[0]}
                                 alt="Gig Main"
+                                width={1200}
+                                height={800}
                                 className="w-full h-auto object-cover max-h-[500px]"
                             />
                         </div>
@@ -141,10 +130,12 @@ function GigDetailsContent() {
                             <h2 className="heading-3 mb-6">About The Seller</h2>
                             <div className="flex flex-col md:flex-row gap-6 mb-6">
                                 <div className="relative flex-shrink-0">
-                                    <img
+                                    <Image
                                         src={gig.author.avatar}
                                         alt={gig.author.name}
-                                        className="w-24 h-24 rounded-full object-cover border-4 border-gray-50"
+                                        width={96}
+                                        height={96}
+                                        className="rounded-full object-cover border-4 border-gray-50"
                                     />
                                     <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                                 </div>
@@ -196,8 +187,8 @@ function GigDetailsContent() {
                                         key={pkg.name}
                                         onClick={() => setActiveTab(idx)}
                                         className={`flex-1 py-4 text-sm font-bold text-center transition-colors border-b-2 ${activeTab === idx
-                                                ? "text-[#1dbf73] border-[#1dbf73] bg-[#1dbf73]/5"
-                                                : "text-gray-500 border-transparent hover:text-gray-700"
+                                            ? "text-[#1dbf73] border-[#1dbf73] bg-[#1dbf73]/5"
+                                            : "text-gray-500 border-transparent hover:text-gray-700"
                                             }`}
                                     >
                                         {pkg.name}
