@@ -41,15 +41,15 @@ export default function GigsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-wrapper">
       <GigsNavbar />
 
-      <main className="pt-24 px-6 max-w-7xl mx-auto pb-20">
+      <main className="pt-32 pb-20 container-main">
         <div className="text-center py-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="heading-1 mb-4">
             Find the perfect freelance services
           </h1>
-          <p className="text-gray-500 text-lg">
+          <p className="text-subtitle">
             Browse through thousands of gigs created by talented freelancers.
           </p>
         </div>

@@ -43,26 +43,22 @@ export default function Hero() {
               className="w-full bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none text-lg"
             />
           </div>
-          <button className="w-full sm:w-auto px-8 py-3.5 bg-[#1dbf73] hover:bg-[#19a463] text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-[#1dbf73]/30 flex items-center justify-center gap-2">
+          <button className="btn-primary w-full sm:w-auto px-8 py-3.5 flex items-center justify-center gap-2 text-base font-semibold">
             <span>Search</span>
           </button>
         </div>
 
-        {/* Popular Tags (Optional Visual Enhancement) */}
+        {/* Popular Tags */}
         <div className="pt-6 flex flex-wrap justify-center items-center gap-3 text-sm text-gray-500">
           <span>Popular:</span>
-          <span className="px-3 py-1 rounded-full border border-gray-200 hover:border-gray-400 hover:text-gray-700 cursor-pointer transition-colors bg-white/50">
-            Web Design
-          </span>
-          <span className="px-3 py-1 rounded-full border border-gray-200 hover:border-gray-400 hover:text-gray-700 cursor-pointer transition-colors bg-white/50">
-            WordPress
-          </span>
-          <span className="px-3 py-1 rounded-full border border-gray-200 hover:border-gray-400 hover:text-gray-700 cursor-pointer transition-colors bg-white/50">
-            Logo Design
-          </span>
-          <span className="px-3 py-1 rounded-full border border-gray-200 hover:border-gray-400 hover:text-gray-700 cursor-pointer transition-colors bg-white/50">
-            AI Services
-          </span>
+          {["Web Design", "WordPress", "Logo Design", "AI Services"].map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-full border border-gray-200 hover:border-gray-400 hover:text-gray-700 cursor-pointer transition-colors bg-white/50"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </section>

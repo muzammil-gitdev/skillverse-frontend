@@ -54,3 +54,78 @@ body {
   background-color: #f9fafb;
   color: #111827;
 }
+
+/* Component Classes */
+@layer components {
+
+  /* Layout */
+  .page-wrapper {
+    @apply min-h-screen bg-gray-50;
+  }
+
+  .container-main {
+    @apply max-w-7xl mx-auto px-8 md:px-12;
+  }
+
+  /* Typography */
+  .heading-1 {
+    @apply text-3xl md:text-5xl font-bold text-gray-900 tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-2xl md:text-3xl font-bold text-gray-900;
+  }
+
+  .heading-3 {
+    @apply text-xl font-bold text-gray-900;
+  }
+
+  .text-body {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  .text-subtitle {
+    @apply text-gray-500 text-lg;
+  }
+
+  /* Forms & Inputs */
+  .input-field {
+    @apply mt-1 block w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1dbf73] focus:ring-[#1dbf73] focus:outline-none transition-colors;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-[#1dbf73] hover:bg-[#19a463] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1dbf73] shadow-lg hover:shadow-xl hover:shadow-[#1dbf73]/30 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer;
+  }
+
+  .btn-social {
+    @apply w-full flex items-center justify-center py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer;
+  }
+
+  /* Links */
+  .link-primary {
+    @apply font-medium text-[#1dbf73] hover:text-[#19a463] transition-colors;
+  }
+
+  .link-back {
+    @apply absolute top-8 left-8 flex items-center gap-2 text-gray-500 hover:text-[#1dbf73] transition-colors font-medium;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm;
+  }
+
+  .card-hover {
+    @apply hover:shadow-xl hover:shadow-[#1dbf73]/10 hover:border-[#1dbf73]/30 transition-all duration-300;
+  }
+
+  /* Badges & Pills */
+  .badge {
+    @apply px-4 py-2 rounded-xl text-sm font-medium;
+  }
+
+  .badge-light {
+    @apply bg-gray-50 text-gray-700 border border-gray-100;
+  }
+}

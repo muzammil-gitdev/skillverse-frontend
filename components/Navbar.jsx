@@ -16,9 +16,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2; // Center detection for centered scrolling
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
-      // Check each section
       for (const link of navLinks) {
         const section = document.querySelector(link.href);
         if (section) {
@@ -27,18 +26,17 @@ export default function Navbar() {
 
           if (scrollPosition >= top && scrollPosition < top + height) {
             setActiveLink(link.name);
-            break; // Found the active section, stop checking
+            break;
           }
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Trigger once on mount to set initial active state
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // Empty dependency array as navLinks is constant for our purpose here
+  }, []);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
@@ -83,19 +81,12 @@ export default function Navbar() {
 
         {/* Right: Auth Buttons & Hamburger */}
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center space-x-2">
             <Link href="/signup">
               <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-300">
                 Sign Up
               </button>
             </Link>
-            {/* <Link href="/login">
-              <button className="relative px-5 py-2.5 text-sm font-semibold text-white rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#1dbf73]/40 hover:-translate-y-0.5">
-                <span className="bg-[#1dbf73] px-5 py-2 rounded-xl">
-                  Log In
-                </span>
-              </button>
-            </Link> */}
             <Link href="./login" className="px-4 py-2 bg-[#1dbf73] text-sm font-medium text-white rounded-xl transition-all duration-300 hover:bg-[#1dbf73]/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1dbf73]/40">
               Login
             </Link>
@@ -106,35 +97,13 @@ export default function Navbar() {
             className="md:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            )}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
           </button>
         </div>
       </div>
@@ -162,11 +131,8 @@ export default function Navbar() {
               </button>
             </Link>
             <Link href="/login" className="w-full">
-              <button className="relative w-full px-5 py-3 text-sm font-semibold text-white rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#1dbf73]/40">
-                <div className="absolute inset-0 bg-[#1dbf73] transition-all duration-300 group-hover:scale-105"></div>
-                <span className="relative z-10 flex justify-center">
-                  Log In
-                </span>
+              <button className="w-full btn-primary">
+                Log In
               </button>
             </Link>
           </div>
