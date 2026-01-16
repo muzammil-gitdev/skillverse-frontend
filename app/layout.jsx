@@ -8,6 +8,8 @@ export const metadata = {
   description: "Connect with top freelancers worldwide",
 };
 
+import ChatBot from "@/components/ChatBot";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
@@ -15,6 +17,7 @@ export default function RootLayout({ children }) {
         className={`${outfit.className} antialiased bg-gray-50 text-gray-900 overflow-x-hidden`}
       >
         {children}
+        <ChatBot />
       </body>
     </html>
   );
