@@ -30,9 +30,24 @@ export default function GigCard({ gig }) {
             className="w-10 h-10 rounded-full object-cover border border-gray-100"
           />
           <div>
-            <h3 className="font-bold text-gray-900 leading-snug line-clamp-2 hover:text-[#1dbf73] transition-colors cursor-pointer">
-              {gig.title}
-            </h3>
+            <Link
+              href={{
+                pathname: `/gigs/${gig.id}`,
+                query: {
+                  title: gig.title,
+                  userName: gig.userName,
+                  userAvatar: gig.userAvatar,
+                  description: gig.description,
+                  rating: gig.rating,
+                  reviews: gig.reviews,
+                  thumbnail: gig.thumbnail
+                }
+              }}
+            >
+              <h3 className="font-bold text-gray-900 leading-snug line-clamp-2 hover:text-[#1dbf73] transition-colors cursor-pointer">
+                {gig.title}
+              </h3>
+            </Link>
             <p className="text-xs text-gray-500 mt-1">
               by{" "}
               <span className="font-medium text-gray-700">{gig.userName}</span>
