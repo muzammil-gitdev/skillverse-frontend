@@ -71,11 +71,10 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeLink === link.name
-                  ? "bg-white text-[#1dbf73] shadow-sm ring-1 ring-gray-200"
-                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
-              }`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeLink === link.name
+                ? "bg-white text-[#1dbf73] shadow-sm ring-1 ring-gray-200"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
+                }`}
             >
               {link.name}
             </Link>
@@ -90,12 +89,15 @@ export default function Navbar() {
                 Sign Up
               </button>
             </Link>
-            <Link href="/login">
+            {/* <Link href="/login">
               <button className="relative px-5 py-2.5 text-sm font-semibold text-white rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#1dbf73]/40 hover:-translate-y-0.5">
                 <span className="bg-[#1dbf73] px-5 py-2 rounded-xl">
                   Log In
                 </span>
               </button>
+            </Link> */}
+            <Link href="./login" className="px-4 py-2 bg-[#1dbf73] text-sm font-medium text-white rounded-xl transition-all duration-300 hover:bg-[#1dbf73]/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1dbf73]/40">
+              Login
             </Link>
           </div>
 
@@ -145,11 +147,10 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
-                activeLink === link.name
-                  ? "bg-gray-100 text-[#1dbf73]"
-                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${activeLink === link.name
+                ? "bg-gray-100 text-[#1dbf73]"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }`}
             >
               {link.name}
             </Link>

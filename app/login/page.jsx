@@ -148,7 +148,7 @@ export default function LoginPage() {
               Sign In
             </button>
             {/* Social Login Placeholder */}
-            {/* <div className="relative">
+            <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200"></div>
               </div>
@@ -192,7 +192,7 @@ export default function LoginPage() {
                   />
                 </svg>
               </button>
-            </div> */}
+            </div>
           </form>
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-500">
