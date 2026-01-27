@@ -15,11 +15,32 @@ export default function SignUpPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
-    // Redirect to the details page with data in query params
-    const queryParams = new URLSearchParams(formData).toString();
-    router.push(`/signup/details?${queryParams}`);
+
+    try {
+      const response = await fetch("http://localhost:1001/api/signup/step1", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Signup failed");
+        return;
+      }
+
+      // If backend is successful, move to next page
+      const queryParams = new URLSearchParams(formData).toString();
+      router.push(`/signup/details?${queryParams}`);
+    } catch (err) {
+      console.error("Error sending data:", err);
+      alert("Server not responding");
+    }
   };
 
   return (
