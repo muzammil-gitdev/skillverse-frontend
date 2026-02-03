@@ -58,7 +58,7 @@ export default function Navbar() {
             <span className="text-xl font-bold text-white">S</span>
           </div>
           <span className="text-xl font-bold tracking-tight text-gray-900">
-            SkillVerse
+            SkillVersed
           </span>
         </div>
 
@@ -69,10 +69,11 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeLink === link.name
-                ? "bg-white text-[#1dbf73] shadow-sm ring-1 ring-gray-200"
-                : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
-                }`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeLink === link.name
+                  ? "bg-white text-[#1dbf73] shadow-sm ring-1 ring-gray-200"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
+              }`}
             >
               {link.name}
             </Link>
@@ -87,7 +88,10 @@ export default function Navbar() {
                 Sign Up
               </button>
             </Link>
-            <Link href="./login" className="px-4 py-2 bg-[#1dbf73] text-sm font-medium text-white rounded-xl transition-all duration-300 hover:bg-[#1dbf73]/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1dbf73]/40">
+            <Link
+              href="./login"
+              className="px-4 py-2 bg-[#1dbf73] text-sm font-medium text-white rounded-xl transition-all duration-300 hover:bg-[#1dbf73]/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1dbf73]/40"
+            >
               Login
             </Link>
           </div>
@@ -97,11 +101,26 @@ export default function Navbar() {
             className="md:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
@@ -116,10 +135,11 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${activeLink === link.name
-                ? "bg-gray-100 text-[#1dbf73]"
-                : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                }`}
+              className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
+                activeLink === link.name
+                  ? "bg-gray-100 text-[#1dbf73]"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
             >
               {link.name}
             </Link>
@@ -131,9 +151,7 @@ export default function Navbar() {
               </button>
             </Link>
             <Link href="/login" className="w-full">
-              <button className="w-full btn-primary">
-                Log In
-              </button>
+              <button className="w-full btn-primary">Log In</button>
             </Link>
           </div>
         </div>
