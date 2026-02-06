@@ -98,7 +98,7 @@ function ChatContent() {
     return (
         <div className="flex flex-col h-screen bg-white">
             <GigsNavbar />
-            <div className="flex flex-1 pt-24 pb-4 px-4 container-main gap-6 overflow-hidden">
+            <div className="flex flex-1 pt-24 pb-4 px-4 container-main gap-6 overflow-hidden w-7/12">
 
                 {/* Sidebar - Contacts List */}
                 <div className="w-80 hidden md:flex flex-col border-r border-gray-100 pr-6">
@@ -172,8 +172,8 @@ function ChatContent() {
                         {currentChat.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[70%] rounded-2xl px-5 py-3 text-sm ${msg.sender === 'me'
-                                        ? 'bg-[#1dbf73] text-white rounded-br-none'
-                                        : 'bg-white border border-gray-100 text-gray-700 rounded-bl-none shadow-sm'
+                                    ? 'bg-[#1dbf73] text-white rounded-br-none'
+                                    : 'bg-white border border-gray-100 text-gray-700 rounded-bl-none shadow-sm'
                                     }`}>
                                     <p>{msg.text}</p>
                                     <div className={`text-[10px] mt-1 text-right ${msg.sender === 'me' ? 'text-green-100' : 'text-gray-400'}`}>
