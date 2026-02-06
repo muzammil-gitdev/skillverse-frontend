@@ -10,36 +10,88 @@ function ChatContent() {
     const sellerAvatar = searchParams.get('sellerAvatar') || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
 
     const [message, setMessage] = useState("");
-    const [chatHistory, setChatHistory] = useState([
-        { sender: "them", text: "Hi there! How can I help you today?", time: "10:00 AM" }
+    const [activeContactId, setActiveContactId] = useState(1);
+
+    // Initial mock contacts
+    const [contacts, setContacts] = useState([
+        { id: 1, name: "John Doe", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80", lastMessage: "Hi there! How can I help you...", time: "10:00 AM" },
+        { id: 2, name: "Alice Smith", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80", lastMessage: "Thanks for the order!", time: "Yesterday" },
+        { id: 3, name: "Robert Johnson", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80", lastMessage: "Can you send the files?", time: "2 days ago" },
     ]);
 
-    // Mock recent contacts
-    const contacts = [
-        { id: 1, name: sellerName || "John Doe", avatar: sellerAvatar, lastMessage: "Hi there! How can I help you...", time: "10:00 AM", active: true },
-        { id: 2, name: "Alice Smith", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80", lastMessage: "Thanks for the order!", time: "Yesterday", active: false },
-        { id: 3, name: "Robert Johnson", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80", lastMessage: "Can you send the files?", time: "2 days ago", active: false },
-    ];
+    // Mock chat histories for different contacts
+    const [chatHistories, setChatHistories] = useState({
+        1: [{ sender: "them", text: "Hi there! How can I help you today?", time: "10:00 AM" }],
+        2: [{ sender: "me", text: "Here is the order.", time: "Yesterday" }, { sender: "them", text: "Thanks for the order!", time: "Yesterday" }],
+        3: [{ sender: "them", text: "Can you send the files?", time: "2 days ago" }]
+    });
 
+    // Handle new seller from URL
     useEffect(() => {
         if (sellerName) {
-            // In a real app, we'd fetch the specific chat history here
-            setChatHistory([
-                { sender: "them", text: `Hi! thanks for checking out my gig. I'm ${sellerName}, how can I help directly?`, time: "Just now" }
-            ]);
+            setContacts(prev => {
+                const existing = prev.find(c => c.name === sellerName);
+                if (existing) {
+                    setActiveContactId(existing.id);
+                    return prev;
+                }
+                const newId = Date.now();
+                const newContact = {
+                    id: newId,
+                    name: sellerName,
+                    avatar: sellerAvatar,
+                    lastMessage: "Started a new conversation",
+                    time: "Just now"
+                };
+                setActiveContactId(newId);
+
+                // Initialize chat history for new contact
+                setChatHistories(prevHistory => ({
+                    ...prevHistory,
+                    [newId]: [{ sender: "them", text: `Hi! thanks for checking out my gig. I'm ${sellerName}, how can I help directly?`, time: "Just now" }]
+                }));
+
+                return [newContact, ...prev];
+            });
         }
-    }, [sellerName]);
+    }, [sellerName, sellerAvatar]);
+
+    const activeContact = contacts.find(c => c.id === activeContactId) || contacts[0];
+    const currentChat = chatHistories[activeContactId] || [];
 
     const handleSend = (e) => {
         e.preventDefault();
         if (!message.trim()) return;
 
-        setChatHistory([...chatHistory, { sender: "me", text: message, time: "Just now" }]);
+        const newMessage = { sender: "me", text: message, time: "Just now" };
+
+        // Update history
+        setChatHistories(prev => ({
+            ...prev,
+            [activeContactId]: [...(prev[activeContactId] || []), newMessage]
+        }));
+
+        // Update contact last message
+        setContacts(prev => prev.map(c =>
+            c.id === activeContactId
+                ? { ...c, lastMessage: message, time: "Just now" }
+                : c
+        ));
+
         setMessage("");
 
         // Simulate reply
         setTimeout(() => {
-            setChatHistory(prev => [...prev, { sender: "them", text: "Thanks for your message! I'll get back to you shortly.", time: "Just now" }]);
+            const reply = { sender: "them", text: "Thanks for your message! I'll get back to you shortly.", time: "Just now" };
+            setChatHistories(prev => ({
+                ...prev,
+                [activeContactId]: [...(prev[activeContactId] || []), reply]
+            }));
+            setContacts(prev => prev.map(c =>
+                c.id === activeContactId
+                    ? { ...c, lastMessage: reply.text, time: "Just now" }
+                    : c
+            ));
         }, 1500);
     };
 
@@ -68,18 +120,19 @@ function ChatContent() {
                         {contacts.map(contact => (
                             <div
                                 key={contact.id}
-                                className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors ${contact.active ? 'bg-[#1dbf73]/5 border border-[#1dbf73]/20' : 'hover:bg-gray-50'}`}
+                                onClick={() => setActiveContactId(contact.id)}
+                                className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors ${activeContactId === contact.id ? 'bg-[#1dbf73]/5 border border-[#1dbf73]/20' : 'hover:bg-gray-50'}`}
                             >
                                 <div className="relative">
                                     <Image src={contact.avatar} alt={contact.name} width={48} height={48} className="rounded-full object-cover" />
-                                    {contact.active && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>}
+                                    {activeContactId === contact.id && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-baseline mb-1">
-                                        <h4 className={`font-semibold text-sm truncate ${contact.active ? 'text-gray-900' : 'text-gray-700'}`}>{contact.name}</h4>
+                                        <h4 className={`font-semibold text-sm truncate ${activeContactId === contact.id ? 'text-gray-900' : 'text-gray-700'}`}>{contact.name}</h4>
                                         <span className="text-xs text-gray-400">{contact.time}</span>
                                     </div>
-                                    <p className={`text-xs truncate ${contact.active ? 'text-[#1dbf73]' : 'text-gray-500'}`}>{contact.lastMessage}</p>
+                                    <p className={`text-xs truncate ${activeContactId === contact.id ? 'text-[#1dbf73]' : 'text-gray-500'}`}>{contact.lastMessage}</p>
                                 </div>
                             </div>
                         ))}
@@ -92,14 +145,14 @@ function ChatContent() {
                     <div className="p-4 bg-white border-b border-gray-100 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Image
-                                src={sellerAvatar || contacts[0].avatar}
-                                alt={sellerName || "Chat"}
+                                src={activeContact.avatar}
+                                alt={activeContact.name}
                                 width={40}
                                 height={40}
                                 className="rounded-full object-cover"
                             />
                             <div>
-                                <h3 className="font-bold text-gray-900">{sellerName || "John Doe"}</h3>
+                                <h3 className="font-bold text-gray-900">{activeContact.name}</h3>
                                 <div className="flex items-center gap-1.5">
                                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                     <span className="text-xs text-gray-500">Online</span>
@@ -116,7 +169,7 @@ function ChatContent() {
                     {/* Chat Messages */}
                     <div className="flex-1 overflow-y-auto p-6 space-y-4">
                         <div className="text-center text-xs text-gray-400 my-4">Today</div>
-                        {chatHistory.map((msg, idx) => (
+                        {currentChat.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[70%] rounded-2xl px-5 py-3 text-sm ${msg.sender === 'me'
                                         ? 'bg-[#1dbf73] text-white rounded-br-none'
