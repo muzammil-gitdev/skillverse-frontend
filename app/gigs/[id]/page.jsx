@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, Suspense } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
 import Image from "next/image";
 
@@ -36,6 +36,8 @@ function GigDetailsContent() {
     const params = useParams();
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState(1); // 0: Basic, 1: Standard, 2: Premium
+
+    const router = useRouter();
 
     // Construct gig object directly from URL query params
     const gig = {
@@ -232,7 +234,25 @@ function GigDetailsContent() {
                                     ))}
                                 </ul>
 
-                                <button className="btn-primary w-full shadow-xl shadow-[#1dbf73]/20">
+                                <button
+                                    onClick={() => {
+                                        const query = new URLSearchParams({
+                                            packageIndex: activeTab.toString(),
+                                            packageName: PACKAGES[activeTab].name,
+                                            packagePrice: PACKAGES[activeTab].price.toString(),
+                                            packageDelivery: PACKAGES[activeTab].delivery,
+                                            packageRevisions: PACKAGES[activeTab].revisions,
+                                            packageFeatures: JSON.stringify(PACKAGES[activeTab].features),
+                                            gigTitle: gig.title,
+                                            gigId: gig.id,
+                                            gigImage: gig.images[0],
+                                            // Pass through specific logic params only, avoiding full dump if possible
+                                            ...Object.fromEntries(searchParams.entries()) // Pass existing context forward
+                                        }).toString();
+                                        router.push(`/gigs/${gig.id}/order?${query}`);
+                                    }}
+                                    className="btn-primary w-full shadow-xl shadow-[#1dbf73]/20"
+                                >
                                     Continue (${PACKAGES[activeTab].price})
                                 </button>
 
