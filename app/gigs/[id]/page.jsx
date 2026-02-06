@@ -151,7 +151,16 @@ function GigDetailsContent() {
                                         <span className="font-bold text-gray-900">{gig.rating}</span>
                                         <span className="text-gray-400">({gig.reviewsCount} reviews)</span>
                                     </div>
-                                    <button className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">
+                                    <button
+                                        onClick={() => {
+                                            const params = new URLSearchParams({
+                                                sellerName: gig.author.name,
+                                                sellerAvatar: gig.author.avatar
+                                            });
+                                            router.push(`/chat?${params.toString()}`);
+                                        }}
+                                        className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors"
+                                    >
                                         Contact Me
                                     </button>
                                 </div>
@@ -256,7 +265,16 @@ function GigDetailsContent() {
                                     Continue (${PACKAGES[activeTab].price})
                                 </button>
 
-                                <button className="w-full text-center text-sm font-medium text-[#1dbf73] hover:underline">
+                                <button
+                                    onClick={() => {
+                                        const params = new URLSearchParams({
+                                            sellerName: gig.author.name,
+                                            sellerAvatar: gig.author.avatar
+                                        });
+                                        router.push(`/chat?${params.toString()}`);
+                                    }}
+                                    className="w-full text-center text-sm font-medium text-[#1dbf73] hover:underline"
+                                >
                                     Contact Seller
                                 </button>
                             </div>
