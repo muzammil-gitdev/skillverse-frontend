@@ -1,8 +1,10 @@
 "use client";
 import { useState, Suspense } from "react"; // Added Suspense
 import { useSearchParams } from "next/navigation";
+import { signupComplete } from "../../services/api";
+import { useContext } from "react";
 import Link from "next/link";
-
+import { AccountContext } from "../../context/accountProvider";
 // Available niches and their corresponding software/tools
 const NICHE_SOFTWARE = {
   "Video Editing": [
@@ -52,16 +54,18 @@ const COUNTRIES = [
 function SignUpDetailsContent() {
   // Create a separate component for the content
   const searchParams = useSearchParams();
+  const { setUserId } = useContext(AccountContext); //context api in account provider.jsx
   const [formData, setFormData] = useState({
-    name: searchParams.get("name") || "",
+    fullName: searchParams.get("fullName") || "",
     username: "",
     email: searchParams.get("email") || "",
+    password: "",
     dob: searchParams.get("dob") || "",
     country: "",
     city: "",
     niche: "",
     software: [],
-    customSoftware: "", // For "Other" or manual entry
+    customSoftware: "",
   });
 
   const [availableSoftware, setAvailableSoftware] = useState([]);
@@ -88,26 +92,31 @@ function SignUpDetailsContent() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:1001/api/signup/complete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const payload = {
+        ...formData,
+        software: [
+          ...formData.software,
+          ...(formData.customSoftware
+            ? formData.customSoftware.split(",").map((s) => s.trim())
+            : []),
+        ],
+      };
 
-      const data = await res.json();
+      const res = await signupComplete(payload);
+      console.log(res);
+      if (res._id) {
+        alert("Profile completed successfully!" + res._id);
+        setUserId(res._id);
+        localStorage.setItem("user_id", res._id); //context is removed if resfreshes
+        localStorage.setItem("profilePic", res.profilePic || "");
+        localStorage.setItem("user_name", res.fullName || "");
+        localStorage.setItem("user_email", res.email || "");
+        localStorage.setItem("user_data", JSON.stringify(res));
 
-      if (!res.ok) {
-        alert(data.message || "Signup failed");
-        return;
+        window.location.href = "/gigs";
       }
-
-      alert("Profile completed successfully!");
-      window.location.href = "http://localhost:3000/gigs";
     } catch (err) {
-      console.error("Error:", err);
-      alert("Server not responding");
+      alert(err.response?.data?.message || "Signup failed");
     }
   };
 
@@ -161,7 +170,6 @@ function SignUpDetailsContent() {
                   }
                 />
               </div>
-
               {/* Location: Country */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -213,7 +221,6 @@ function SignUpDetailsContent() {
                   }
                 />
               </div>
-
               {/* Niche Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,7 +240,6 @@ function SignUpDetailsContent() {
                   ))}
                 </select>
               </div>
-
               {/* Software Selection */}
               {formData.niche && availableSoftware.length > 0 && (
                 <div className="space-y-2">
@@ -259,7 +265,6 @@ function SignUpDetailsContent() {
                   <p className="text-xs text-gray-400">Select all that apply</p>
                 </div>
               )}
-
               {/* Add Custom Software Input for flexibility */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -272,6 +277,22 @@ function SignUpDetailsContent() {
                   value={formData.customSoftware}
                   onChange={(e) =>
                     setFormData({ ...formData, customSoftware: e.target.value })
+                  }
+                />
+              </div>
+              {/* Password */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="input-field"
+                  required
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
                   }
                 />
               </div>

@@ -1,6 +1,6 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
-
+import AccountProvider from "./context/accountProvider";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,8 +16,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${outfit.className} antialiased bg-gray-50 text-gray-900 overflow-x-hidden`}
       >
-        {children}
-        <ChatBot />
+        <AccountProvider>
+          {children}
+          <ChatBot />
+        </AccountProvider>
       </body>
     </html>
   );

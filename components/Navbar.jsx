@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 
 export default function Navbar() {
   const [activeLink, setActiveLink] = useState("Find Work");

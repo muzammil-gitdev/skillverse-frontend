@@ -1,34 +1,58 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
 import GigCard from "@/components/GigCard";
+import { AccountContext } from "../context/accountProvider";
+// import { getUserById } from "@/services/api"; // make sure this exists
+import { getUserById } from "../services/api";
 
 export default function GigsPage() {
   const [gigs, setGigs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { user_id, setUserId, setAccount } = useContext(AccountContext);
+  const router = useRouter();
+
   useEffect(() => {
-    const fetchGigs = async () => {
+    const checkAuthAndFetch = async () => {
       try {
-        const res = await fetch("http://localhost:1001/api/freelancers");
+        // ✅ 1. Get ID from context or localStorage
+        let id = user_id || localStorage.getItem("user_id");
+
+        // ❌ If no ID → redirect to login
+        if (!id) {
+          router.push("/login");
+          return;
+        }
+
+        // ✅ If context missing but localStorage exists → restore context
+        if (!user_id && id) {
+          setUserId(id);
+        }
+
+        // ✅ Fetch logged in user
+        const userData = await getUserById(id);
+        const user = userData.user; // contains profilePic, name, email, etc.
+        localStorage.setItem("user_data", JSON.stringify(user));
+        setAccount(userData.user);
+        // ✅ Fetch gigs
+        const res = await fetch("http://localhost:1001/gig/get/gigs");
         const data = await res.json();
 
         if (data.success) {
-          // map database fields to gig format
-          const mappedGigs = data.data.map((freelancer) => ({
-            id: freelancer._id,
-            title: freelancer.title,
-            userName: freelancer.name,
-            userAvatar: freelancer.userAvatar, // optional: you can store avatar in DB
-            thumbnail: freelancer.thumbnail, // optional: sample gig image
-            description: freelancer.description,
-            rating: freelancer.rating || 5,
-            reviews: Math.floor(Math.random() * 100) + 1, // random reviews count
+          const mappedGigs = data.data.map((gig) => ({
+            id: gig._id,
+            title: gig.title,
+            userName: gig.creator?.fullName || "Unknown",
+            userAvatar: gig.creator?.profilePic || "/default-avatar.png",
+            thumbnail: gig.images?.[0] || "",
+            description: gig.description,
+            rating: gig.rating || 5,
+            reviews: gig.reviews?.length || 0,
           }));
 
           setGigs(mappedGigs);
-        } else {
-          console.error("Failed to fetch gigs:", data.error);
         }
       } catch (err) {
         console.error(err);
@@ -37,8 +61,8 @@ export default function GigsPage() {
       }
     };
 
-    fetchGigs();
-  }, []);
+    checkAuthAndFetch();
+  }, [user_id]); // ✅ depend on user_id
 
   return (
     <div className="page-wrapper">
