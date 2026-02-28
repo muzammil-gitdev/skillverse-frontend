@@ -15,7 +15,10 @@ export default function GigCard({ gig }) {
       {/* Gig Thumbnail */}
       <div className="h-48 bg-gray-200 relative overflow-hidden">
         <img
-          src={gig.thumbnail}
+          src={
+            gig.thumbnail ||
+            "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772315776/images_hqgnan.jpg"
+          }
           alt={gig.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -40,8 +43,10 @@ export default function GigCard({ gig }) {
                   description: gig.description,
                   rating: gig.rating,
                   reviews: gig.reviews,
-                  thumbnail: gig.thumbnail
-                }
+                  thumbnail:
+                    gig.thumbnail ||
+                    "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772315776/images_hqgnan.jpg",
+                },
               }}
             >
               <h3 className="font-bold text-gray-900 leading-snug line-clamp-2 hover:text-[#1dbf73] transition-colors cursor-pointer">

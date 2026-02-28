@@ -64,6 +64,12 @@ export default function GigsNavbar() {
                 View Profile
               </Link>
               <Link
+                href="/chat"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#1dbf73] transition-colors"
+              >
+                Messages
+              </Link>
+              <Link
                 href="/"
                 className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                 onClick={() => {

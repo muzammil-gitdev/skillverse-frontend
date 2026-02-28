@@ -16,8 +16,11 @@ function GigDetailsContent() {
     const fetchGig = async () => {
       try {
         const data = await getGigById(params.id);
+        console.log("getgigs by id data", data);
         if (data.success) {
+          console.log("data.success called");
           setGig(data.data);
+          console.log("gig.creator?._id", gig);
           // Set initial active tab based on available packages
           const firstAvailable = Object.keys(data.data.packages)[0];
           setActiveTab(firstAvailable || "basic");
@@ -141,7 +144,7 @@ function GigDetailsContent() {
                   <p className="text-gray-500 mb-3">Professional Freelancer</p>
                   <button
                     onClick={() =>
-                      router.push(`/chat?sellerId=${gig.creator?._id}`)
+                      router.push(`/chat?receiverId=${gig.creator?._id}`)
                     }
                     className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors"
                   >
@@ -250,7 +253,7 @@ function GigDetailsContent() {
 
                   <button
                     onClick={() =>
-                      router.push(`/chat?sellerId=${gig.creator?._id}`)
+                      router.push(`/chat?receiverId=${gig.creator?._id}`)
                     }
                     className="w-full text-center text-sm font-medium text-[#1dbf73] hover:underline"
                   >

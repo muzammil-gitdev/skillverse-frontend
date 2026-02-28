@@ -41,12 +41,17 @@ export default function GigsPage() {
         const data = await res.json();
 
         if (data.success) {
+          console.log("gigs page data", data);
           const mappedGigs = data.data.map((gig) => ({
             id: gig._id,
             title: gig.title,
-            userName: gig.creator?.fullName || "Unknown",
-            userAvatar: gig.creator?.profilePic || "/default-avatar.png",
-            thumbnail: gig.images?.[0] || "",
+            userName: gig.creatorName || " Unknown",
+            userAvatar:
+              gig.creator?.profilePic ||
+              "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png",
+            thumbnail:
+              gig.images?.[0] ||
+              "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772315776/images_hqgnan.jpg",
             description: gig.description,
             rating: gig.rating || 5,
             reviews: gig.reviews?.length || 0,
