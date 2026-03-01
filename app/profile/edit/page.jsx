@@ -71,7 +71,10 @@ function EditProfileContent() {
             <div className="flex flex-col items-center mb-8">
               <div className="relative w-32 h-32 mb-4">
                 <Image
-                  src={formData.avatar || "/default-avatar.png"}
+                  src={
+                    formData.avatar ||
+                    "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
+                  }
                   alt="Profile Preview"
                   fill
                   className="rounded-full object-cover border-4 border-gray-100"

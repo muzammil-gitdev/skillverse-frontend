@@ -35,7 +35,10 @@ export default function GigsNavbar() {
           >
             <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-gray-100 hover:border-[#1dbf73] transition-all">
               <img
-                src={user?.profilePic || "/default-avatar.png"} // fallback
+                src={
+                  user?.profilePic ||
+                  "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
+                } // fallback
                 alt="User profile"
                 className="h-full w-full object-cover"
               />

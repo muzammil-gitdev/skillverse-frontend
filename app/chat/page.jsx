@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
 import Image from "next/image";
 import { AccountContext } from "../context/accountProvider";
+import { socket } from "../services/socket";
 import {
   setConversation,
   getConversation,
@@ -14,12 +15,11 @@ import {
 } from "../services/chatapi";
 
 function ChatContent() {
-  const { user_id } = useContext(AccountContext);
-  const senderId = user_id || localStorage.getItem("user_id");
+  const { user_id, onlineUsers, setOnlineUsers } = useContext(AccountContext);
+  const senderId = user_id;
 
   const searchParams = useSearchParams();
   const receiverIdFromParams = searchParams.get("receiverId");
-
   const [message, setMessage] = useState("");
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
@@ -27,6 +27,25 @@ function ChatContent() {
 
   // State to store user info
   const [usersInfo, setUsersInfo] = useState({});
+  useEffect(() => {
+    socket.on("getMessage", (data) => {
+      // 1. Update main chat if it's the active window
+      if (data.conversationId === activeConversationId) {
+        setMessages((prev) => [...prev, data]);
+      }
+
+      // 2. Update the sidebar "last message" for that conversation
+      setConversations((prevConvos) =>
+        prevConvos.map((convo) =>
+          convo._id === data.conversationId
+            ? { ...convo, message: data.text, updatedAt: data.createdAt }
+            : convo,
+        ),
+      );
+    });
+
+    return () => socket.off("getMessage");
+  }, [activeConversationId]);
 
   /* ===============================
      LOAD ALL CONVERSATIONS
@@ -40,6 +59,13 @@ function ChatContent() {
 
     fetchConversations();
   }, [senderId]);
+
+  const scrollRef = React.useRef();
+
+  useEffect(() => {
+    // Scrolls to bottom whenever messages change
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   /* ===============================
      FETCH USER DETAILS
@@ -113,9 +139,12 @@ function ChatContent() {
   /* ===============================
      SEND MESSAGE
   =============================== */
+  /* ===============================
+   SEND MESSAGE
+=============================== */
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!message.trim() || !activeConversationId) return;
 
     const activeConversation = conversations.find(
       (c) => c._id === activeConversationId,
@@ -131,12 +160,18 @@ function ChatContent() {
       conversationId: activeConversationId,
       type: "text",
       text: message,
+      createdAt: new Date().toISOString(), // Add timestamp for immediate UI update
     };
 
+    // 1. Emit to Socket for Real-time delivery
+    socket.emit("sendMessage", data);
+
+    // 2. Save to Database
     await newMessage(data);
 
-    const updatedMessages = await getMessage(activeConversationId);
-    setMessages(updatedMessages || []);
+    // 3. Optimistic UI Update: Add the message to your own state immediately
+    setMessages((prev) => [...prev, data]);
+
     setMessage("");
   };
 
@@ -162,51 +197,51 @@ function ChatContent() {
 
           <div className="flex-1 overflow-y-auto space-y-2">
             {conversations.map((conversation) => {
-              if (conversation.message) {
-                const otherUserId = conversation.members?.find(
-                  (m) => m !== senderId,
-                );
-                const user = usersInfo[otherUserId] || {};
+              // 1. Move the check inside the return or handle the skip
+              if (!conversation.message) return null;
 
-                return (
-                  <div
-                    key={conversation._id}
-                    onClick={() => setActiveConversationId(conversation._id)}
-                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors ${
-                      activeConversationId === conversation._id
-                        ? "bg-[#1dbf73]/5 border border-[#1dbf73]/20"
-                        : "hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
-                      <img
-                        src={
-                          user.profilePic ||
-                          "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
-                        }
-                        alt="profile"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+              const otherUserId = conversation.members?.find(
+                (m) => m !== senderId,
+              );
+              const user = usersInfo[otherUserId] || {};
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline mb-1">
-                        <h4 className="font-semibold text-sm truncate text-gray-900">
-                          {user.fullName || "Loading..."}
-                        </h4>
-                        <span className="text-xs text-gray-400">
-                          {new Date(
-                            conversation.updatedAt,
-                          ).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-xs truncate text-gray-500">
-                        {conversation.message || "No messages yet"}
-                      </p>
-                    </div>
+              return (
+                <div
+                  // 2. Ensure the KEY is on this outermost DIV
+                  key={conversation._id}
+                  onClick={() => setActiveConversationId(conversation._id)}
+                  className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors ${
+                    activeConversationId === conversation._id
+                      ? "bg-[#1dbf73]/5 border border-[#1dbf73]/20"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-200">
+                    <img
+                      src={
+                        user.profilePic ||
+                        "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
+                      }
+                      alt="profile"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                );
-              }
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                      <h4 className="font-semibold text-sm truncate text-gray-900">
+                        {user.fullName || "Loading..."}
+                      </h4>
+                      <span className="text-xs text-gray-400">
+                        {new Date(conversation.updatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-xs truncate text-gray-500">
+                      {conversation.message}
+                    </p>
+                  </div>
+                </div>
+              );
             })}
           </div>
         </div>
@@ -216,23 +251,35 @@ function ChatContent() {
           {/* Chat Header */}
           <div className="p-4 bg-white border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200">
                 <img
                   src={
                     activeUser.profilePic ||
                     "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
                   }
-                  alt="active profile"
                   className="w-full h-full object-cover"
                 />
+
+                {onlineUsers.some((u) => u.id === activeReceiverId) && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                )}
               </div>
               <div>
                 <h3 className="font-bold text-gray-900">
                   {activeUser.fullName || "Loading..."}
                 </h3>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-gray-500">Online</span>
+                  {onlineUsers.some((user) => user.id === activeReceiverId) ? (
+                    <>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-xs text-gray-500">Online</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                      <span className="text-xs text-gray-500">Offline</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -249,6 +296,7 @@ function ChatContent() {
                   msg.senderId === senderId ? "justify-end" : "justify-start"
                 }`}
               >
+                <div ref={scrollRef} />
                 <div
                   className={`max-w-[70%] rounded-2xl px-5 py-3 text-sm ${
                     msg.senderId === senderId

@@ -22,17 +22,20 @@ export default function SignUpPage() {
     }));
   };
 
+  // SignUpPage.jsx
   const handleNext = async (e) => {
     e.preventDefault();
-
     try {
       const res = await signupStep1(formData);
-
       if (res.success) {
-        const queryParams = new URLSearchParams(formData).toString();
-        router.push(`/signup/details?${queryParams}`);
+        // Redirect to verification page, passing the email and existing formData
+        const queryParams = new URLSearchParams({
+          ...formData,
+          email: res.email,
+        }).toString();
+        router.push(`/signup/verify?${queryParams}`);
       } else {
-        alert(res.message || "Signup failed");
+        alert(res.message);
       }
     } catch (err) {
       alert(err.response?.data?.message || "Signup failed");

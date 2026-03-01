@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const searchParams = useSearchParams();
 
   const router = useRouter();
-
+  useEffect(() => {
+    // .get() retrieves the value of the 'error' key from the URL
+    const errorMsg = searchParams.get("error");
+    if (errorMsg) {
+      setError(errorMsg);
+    }
+  }, [searchParams]);
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");

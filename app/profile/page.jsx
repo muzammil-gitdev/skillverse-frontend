@@ -65,7 +65,10 @@ function ProfileContent() {
               <div className="relative">
                 <div className="h-40 w-40 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white">
                   <img
-                    src={profile.profilePic}
+                    src={
+                      profile.profilePic ||
+                      "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1772314700/avatar_nzve1u.png"
+                    }
                     alt="Profile"
                     className="h-full w-full object-cover"
                   />
