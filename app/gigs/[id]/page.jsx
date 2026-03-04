@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, Suspense, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import GigsNavbar from "@/components/GigsNavbar";
 import Image from "next/image";
 import { getGigById } from "../../services/api";
@@ -69,7 +70,7 @@ function GigDetailsContent() {
               </h1>
 
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-6">
-                <div className="flex items-center gap-2">
+                <Link href={`/user/${gig.creator?._id}`} className="flex items-center gap-2 group">
                   <Image
                     src={
                       gig.creator?.profilePic ||
@@ -78,12 +79,12 @@ function GigDetailsContent() {
                     alt={gig.creator?.fullName}
                     width={32}
                     height={32}
-                    className="rounded-full object-cover"
+                    className="rounded-full object-cover group-hover:ring-2 ring-[#1dbf73] transition-all"
                   />
-                  <span className="font-bold text-gray-900">
+                  <span className="font-bold text-gray-900 group-hover:text-[#1dbf73] transition-colors">
                     {gig.creator?.fullName}
                   </span>
-                </div>
+                </Link>
                 <span>|</span>
                 <div className="flex items-center gap-1">
                   <svg
@@ -124,23 +125,25 @@ function GigDetailsContent() {
             <div className="card p-8">
               <h2 className="heading-3 mb-6">About The Seller</h2>
               <div className="flex flex-col md:flex-row gap-6 mb-6">
-                <div className="relative flex-shrink-0">
+                <Link href={`/user/${gig.creator?._id}`} className="relative flex-shrink-0 group">
                   <Image
                     src={
                       gig.creator?.profilePic ||
-                      "/https://res.cloudinary.com/dkr5ewnfu/image/upload/v1771180417/cld-sample-2.jpg"
+                      "https://res.cloudinary.com/dkr5ewnfu/image/upload/v1771180417/cld-sample-2.jpg"
                     }
                     alt={gig.creator?.fullName}
                     width={96}
                     height={96}
-                    className="rounded-full object-cover border-4 border-gray-50"
+                    className="rounded-full object-cover border-4 border-gray-50 group-hover:border-[#1dbf73]/20 transition-colors"
                   />
                   <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
-                </div>
+                </Link>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">
-                    {gig.creator?.fullName}
-                  </h3>
+                  <Link href={`/user/${gig.creator?._id}`}>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1 hover:text-[#1dbf73] transition-colors">
+                      {gig.creator?.fullName}
+                    </h3>
+                  </Link>
                   <p className="text-gray-500 mb-3">Professional Freelancer</p>
                   <button
                     onClick={() =>
@@ -177,11 +180,10 @@ function GigDetailsContent() {
                   <button
                     key={key}
                     onClick={() => setActiveTab(key)}
-                    className={`flex-1 py-4 text-sm font-bold text-center transition-colors border-b-2 ${
-                      activeTab === key
+                    className={`flex-1 py-4 text-sm font-bold text-center transition-colors border-b-2 ${activeTab === key
                         ? "text-[#1dbf73] border-[#1dbf73] bg-[#1dbf73]/5"
                         : "text-gray-500 border-transparent hover:text-gray-700"
-                    }`}
+                      }`}
                   >
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </button>
