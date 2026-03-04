@@ -63,8 +63,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       {/* Left Side - Hero/Image */}
-      <div className="hidden md:flex flex-col justify-center items-center bg-[#1dbf73] p-12 relative overflow-hidden group">
-        {/* Background & gradient */}
+      <div className="hidden md:flex relative flex-col justify-center items-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          alt="Login background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Theme color overlay */}
+        <div className="absolute inset-0 bg-[#1dbf73] bg-opacity-80 mix-blend-multiply"></div>
+
+        <div className="relative z-10 text-center text-white p-12">
+          <h2 className="text-4xl font-bold mb-4 drop-shadow-md">SkillVerse</h2>
+          <p className="text-lg text-green-50 drop-shadow-sm max-w-sm mx-auto">
+            Connect with top talent and discover your next big opportunity.
+          </p>
+        </div>
       </div>
 
       {/* Right Side - Form */}

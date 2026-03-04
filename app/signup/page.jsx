@@ -146,10 +146,18 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      <div className="hidden md:flex items-center justify-center bg-[#1dbf73] text-white p-12 order-1 md:order-2">
-        <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold mb-4">New Here?</h1>
-          <p className="text-lg text-green-100">
+      <div className="hidden md:flex relative flex-col justify-center items-center overflow-hidden order-1 md:order-2">
+        <img
+          src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          alt="Signup background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Theme color overlay */}
+        <div className="absolute inset-0 bg-[#1dbf73] bg-opacity-80 mix-blend-multiply"></div>
+
+        <div className="relative z-10 text-center text-white p-12 max-w-md">
+          <h1 className="text-4xl font-bold mb-4 drop-shadow-md">New Here?</h1>
+          <p className="text-lg text-green-50 drop-shadow-sm">
             Sign up and discover a vast world of opportunities!
           </p>
         </div>
