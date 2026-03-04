@@ -12,7 +12,7 @@ export default function AdminSidebar() {
     ];
 
     return (
-        <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0 min-h-[calc(100vh-80px)]">
+        <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0 min-h-[calc(100vh-80px)] relative">
             <div className="p-6">
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
                     <div className="h-8 w-8 rounded-lg bg-[#1dbf73] flex items-center justify-center text-white text-lg">S</div>
@@ -39,6 +39,17 @@ export default function AdminSidebar() {
                     );
                 })}
             </nav>
+            <div className="absolute bottom-8 w-64 px-4">
+                <Link
+                    href="/"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full"
+                >
+                    <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span className="truncate">Back to Home</span>
+                </Link>
+            </div>
         </div>
     );
 }
