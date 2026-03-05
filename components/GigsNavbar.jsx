@@ -48,6 +48,12 @@ export default function GigsNavbar() {
 
         {/* Right: Profile */}
         <div className="flex items-center gap-4 flex-shrink-0 relative">
+          <Link
+            href="/orders"
+            className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            Orders
+          </Link>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="relative flex items-center gap-2 p-1 rounded-full hover:bg-gray-50 transition-colors focus:outline-none"
@@ -66,8 +72,8 @@ export default function GigsNavbar() {
             {/* Dropdown */}
             <div
               className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 transform transition-all duration-200 origin-top-right ${isDropdownOpen
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-95 pointer-events-none"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none"
                 }`}
             >
               <div className="px-4 py-3 border-b border-gray-50">
