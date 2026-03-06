@@ -29,6 +29,22 @@ export const getUserById = async (id) => {
   }
 };
 //used on edit page
+export const uploadProfilePic = async (file) => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await axios.post(
+    "http://localhost:1001/user/upload-profile-image",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+
+  return response.data; // should return { url: "cloudinary_link" }
+};
 export const updateUser = async (id, data) => {
   try {
     const res = await axios.put(`${url}/user/update/${id}`, data);

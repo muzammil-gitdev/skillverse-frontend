@@ -70,7 +70,10 @@ function GigDetailsContent() {
               </h1>
 
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-6 border-b border-gray-100 pb-6">
-                <Link href={`/user/${gig.creator?._id}`} className="flex items-center gap-2 group">
+                <Link
+                  href={`/user/${gig.creator?._id}`}
+                  className="flex items-center gap-2 group"
+                >
                   <Image
                     src={
                       gig.creator?.profilePic ||
@@ -125,7 +128,10 @@ function GigDetailsContent() {
             <div className="card p-8">
               <h2 className="heading-3 mb-6">About The Seller</h2>
               <div className="flex flex-col md:flex-row gap-6 mb-6">
-                <Link href={`/user/${gig.creator?._id}`} className="relative flex-shrink-0 group">
+                <Link
+                  href={`/user/${gig.creator?._id}`}
+                  className="relative flex-shrink-0 group"
+                >
                   <Image
                     src={
                       gig.creator?.profilePic ||
@@ -175,8 +181,13 @@ function GigDetailsContent() {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="heading-3">Reviews</h2>
                 <div className="text-yellow-400 flex items-center gap-1 font-bold text-lg">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                  4.9 <span className="text-gray-500 text-sm font-normal">(120 reviews)</span>
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  4.9{" "}
+                  <span className="text-gray-500 text-sm font-normal">
+                    (120 reviews)
+                  </span>
                 </div>
               </div>
 
@@ -184,9 +195,13 @@ function GigDetailsContent() {
                 {/* Mock Review 1 */}
                 <div className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">AL</div>
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                      AL
+                    </div>
                     <div>
-                      <h4 className="font-bold text-gray-900 text-sm">Alex Lion</h4>
+                      <h4 className="font-bold text-gray-900 text-sm">
+                        Alex Lion
+                      </h4>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <span>United States</span>
                         <span>•</span>
@@ -195,17 +210,33 @@ function GigDetailsContent() {
                     </div>
                   </div>
                   <div className="flex text-yellow-400 mb-2">
-                    {[1, 2, 3, 4, 5].map(s => <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>)}
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <svg
+                        key={s}
+                        className="w-4 h-4 fill-current"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">Amazing work, delivered faster than expected. Communication was excellent throughout the whole process. Highly recommended!</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    Amazing work, delivered faster than expected. Communication
+                    was excellent throughout the whole process. Highly
+                    recommended!
+                  </p>
                 </div>
 
                 {/* Mock Review 2 */}
                 <div className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                   <div className="flex items-center gap-4 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold">MK</div>
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold">
+                      MK
+                    </div>
                     <div>
-                      <h4 className="font-bold text-gray-900 text-sm">Maria K.</h4>
+                      <h4 className="font-bold text-gray-900 text-sm">
+                        Maria K.
+                      </h4>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <span>Canada</span>
                         <span>•</span>
@@ -214,9 +245,21 @@ function GigDetailsContent() {
                     </div>
                   </div>
                   <div className="flex text-yellow-400 mb-2">
-                    {[1, 2, 3, 4, 5].map(s => <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>)}
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <svg
+                        key={s}
+                        className="w-4 h-4 fill-current"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
                   </div>
-                  <p className="text-gray-700 text-sm leading-relaxed">Such a great experience working with this freelancer. They understood my requirements perfectly and gave me exactly what I was looking for.</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    Such a great experience working with this freelancer. They
+                    understood my requirements perfectly and gave me exactly
+                    what I was looking for.
+                  </p>
                 </div>
               </div>
 
@@ -224,7 +267,16 @@ function GigDetailsContent() {
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <h3 className="font-bold text-gray-900 mb-4">Write a Review</h3>
                 <div className="flex gap-2 mb-3">
-                  {[1, 2, 3, 4, 5].map(s => <button key={s} className="text-gray-300 hover:text-yellow-400 focus:outline-none transition-colors"><svg className="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg></button>)}
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <button
+                      key={s}
+                      className="text-gray-300 hover:text-yellow-400 focus:outline-none transition-colors"
+                    >
+                      <svg className="w-6 h-6 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </button>
+                  ))}
                 </div>
                 <textarea
                   className="w-full h-24 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1dbf73] focus:border-transparent outline-none resize-none mb-3 text-sm"
@@ -246,10 +298,11 @@ function GigDetailsContent() {
                   <button
                     key={key}
                     onClick={() => setActiveTab(key)}
-                    className={`flex-1 py-4 text-sm font-bold text-center transition-colors border-b-2 ${activeTab === key
-                      ? "text-[#1dbf73] border-[#1dbf73] bg-[#1dbf73]/5"
-                      : "text-gray-500 border-transparent hover:text-gray-700"
-                      }`}
+                    className={`flex-1 py-4 text-sm font-bold text-center transition-colors border-b-2 ${
+                      activeTab === key
+                        ? "text-[#1dbf73] border-[#1dbf73] bg-[#1dbf73]/5"
+                        : "text-gray-500 border-transparent hover:text-gray-700"
+                    }`}
                   >
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </button>
@@ -267,11 +320,9 @@ function GigDetailsContent() {
                       ${currentPackage.price}
                     </span>
                   </div>
-
                   <p className="text-sm text-gray-600 leading-relaxed min-h-[60px]">
                     {currentPackage.description}
                   </p>
-
                   <div className="flex items-center gap-4 text-sm font-bold text-gray-700">
                     <div className="flex items-center gap-1">
                       <svg
@@ -309,16 +360,32 @@ function GigDetailsContent() {
                       Revisions
                     </div>
                   </div>
-
                   <button
-                    onClick={() =>
-                      router.push(`/gigs/${gig._id}/order?package=${activeTab}`)
-                    }
+                    onClick={() => {
+                      // 1. Prepare the query parameters
+                      const query = new URLSearchParams({
+                        packageIndex: activeTab,
+                        packageName: currentPackage.title || activeTab,
+                        packageDesc: gig.description,
+                        packagePrice: currentPackage.price,
+                        packageDelivery: currentPackage.deliveryTime,
+                        packageRevisions: currentPackage.revisions,
+                        // Ensure features are stringified so they can be passed in a URL
+                        packageFeatures: JSON.stringify(
+                          currentPackage.features || [],
+                        ),
+                        gigTitle: gig.title,
+                        gigId: gig._id,
+                        gigImage: gig.images?.[0] || "",
+                      });
+
+                      // 2. Navigate with the query string
+                      router.push(`/gigs/${gig._id}/order?${query.toString()}`);
+                    }}
                     className="btn-primary w-full shadow-xl shadow-[#1dbf73]/20 py-3 rounded-lg font-bold"
                   >
                     Continue (${currentPackage.price})
                   </button>
-
                   <button
                     onClick={() =>
                       router.push(`/chat?receiverId=${gig.creator?._id}`)

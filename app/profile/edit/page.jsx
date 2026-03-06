@@ -1,18 +1,20 @@
 "use client";
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
 import Image from "next/image";
-import { useContext } from "react";
 import { AccountContext } from "@/app/context/accountProvider";
-import { updateUser } from "../../services/api";
-import { getUserById } from "../../services/api";
+import { updateUser, getUserById, uploadProfilePic } from "../../services/api";
+
 function EditProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user_id, setAccount } = useContext(AccountContext);
-  let id = user_id || localStorage.getItem("user_id");
-  // Initialize state from URL params or defaults
+
+  const id = user_id || localStorage.getItem("user_id");
+
+  const [uploading, setUploading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: searchParams.get("name") || "",
     role: searchParams.get("role") || "client",
@@ -27,6 +29,28 @@ function EditProfileContent() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  // Upload image to Cloudinary
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+
+      const res = await uploadProfilePic(file);
+
+      setFormData((prev) => ({
+        ...prev,
+        avatar: res.url, // save cloudinary link
+      }));
+
+      setUploading(false);
+    } catch (error) {
+      console.error("Image upload failed", error);
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -44,13 +68,15 @@ function EditProfileContent() {
 
     console.log("Sending:", payload);
 
-    const updated = await updateUser(user_id, payload);
+    const updated = await updateUser(id, payload);
 
     if (updated) {
       const userData = await getUserById(id);
-      const user = userData.user; // contains profilePic, name, email, etc.
+      const user = userData.user;
+
       localStorage.setItem("user_data", JSON.stringify(user));
-      setAccount(userData.user);
+      setAccount(user);
+
       router.push("/profile");
     }
   };
@@ -67,7 +93,7 @@ function EditProfileContent() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Profile Picture Preview */}
+            {/* Profile Picture */}
             <div className="flex flex-col items-center mb-8">
               <div className="relative w-32 h-32 mb-4">
                 <Image
@@ -79,20 +105,21 @@ function EditProfileContent() {
                   fill
                   className="rounded-full object-cover border-4 border-gray-100"
                 />
-                <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
-                  <span className="text-white text-xs font-semibold">
-                    Change
-                  </span>
-                </div>
               </div>
-              <FormInput
-                label="Profile Picture URL"
-                name="avatar"
-                value={formData.avatar}
-                onChange={handleChange}
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="text-sm"
               />
+
+              {uploading && (
+                <p className="text-xs text-gray-500 mt-2">Uploading image...</p>
+              )}
             </div>
 
+            {/* Name + Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormInput
                 label="Full Name"
@@ -100,6 +127,7 @@ function EditProfileContent() {
                 value={formData.name}
                 onChange={handleChange}
               />
+
               <FormInput
                 label="Email Address"
                 name="email"
@@ -108,6 +136,7 @@ function EditProfileContent() {
               />
             </div>
 
+            {/* Role */}
             <select
               name="role"
               value={formData.role}
@@ -119,10 +148,12 @@ function EditProfileContent() {
               <option value="both">Both</option>
             </select>
 
+            {/* Skills */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Skills
               </label>
+
               <textarea
                 name="skills"
                 value={formData.skills}
@@ -130,11 +161,13 @@ function EditProfileContent() {
                 rows={3}
                 className="w-full p-3 border border-gray-300 rounded-lg"
               />
+
               <p className="text-xs text-gray-400 mt-1">
                 Separate skills with commas.
               </p>
             </div>
 
+            {/* Buttons */}
             <div className="pt-6 flex items-center gap-4">
               <button
                 type="button"
@@ -143,6 +176,7 @@ function EditProfileContent() {
               >
                 Cancel
               </button>
+
               <button
                 type="submit"
                 className="btn-primary flex-1 py-3 shadow-lg shadow-[#1dbf73]/20"
@@ -157,7 +191,7 @@ function EditProfileContent() {
   );
 }
 
-// Helper Component for inputs
+// Input Component
 function FormInput({
   label,
   name,
@@ -171,6 +205,7 @@ function FormInput({
       <label className="block text-sm font-semibold text-gray-700 mb-2">
         {label}
       </label>
+
       <input
         type={type}
         name={name}

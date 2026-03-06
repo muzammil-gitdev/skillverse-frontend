@@ -51,3 +51,14 @@ export const getConversationDetails = async (id) => {
     console.log(error.message);
   }
 };
+
+export const chatBots = async (userText) => {
+  try {
+    const response = await axios.post(`${url}/api/chat`, {
+      message: userText,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
