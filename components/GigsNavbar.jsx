@@ -6,6 +6,7 @@ export default function GigsNavbar() {
   const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { setAccount, setUserId } = useContext(AccountContext);
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
   useEffect(() => {
     const storedUser = localStorage.getItem("user_data");
     console.log(storedUser);
@@ -41,13 +42,75 @@ export default function GigsNavbar() {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
         </div>
 
         {/* Right: Profile */}
         <div className="flex items-center gap-4 flex-shrink-0 relative">
+          {/**drop down wallet */}
+          <div className="relative">
+            {/* 💼 Wallet Button */}
+            <button
+              onClick={() => setIsWalletOpen(!isWalletOpen)}
+              className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-[#1dbf73] border border-[#1dbf73] rounded-full hover:bg-[#19a463] transition-colors shadow-sm"
+            >
+              Wallet
+            </button>
+
+            {/* 🔽 Dropdown */}
+            <div
+              className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 transition-all ${
+                isWalletOpen
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
+            >
+              {/* Title */}
+              <div className="px-4 py-2 border-b border-gray-100">
+                <p className="text-sm font-semibold text-gray-800">Wallet</p>
+              </div>
+
+              {/* Balances */}
+              {/* Balances */}
+              <div className="px-4 py-3 text-sm border-b border-gray-50">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-500 uppercase font-medium">
+                    Available
+                  </span>
+                  <span className="font-bold text-green-600">
+                    ${Number(user?.availableBalance || 0).toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-xs text-gray-500 uppercase font-medium">
+                    Pending
+                  </span>
+                  <span className="font-bold text-amber-600">
+                    {/* Note the Capital 'P' to match your schema */}$
+                    {Number(user?.PendingBalance || 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              {/* Withdraw */}
+              <div className="px-4 pb-2">
+                <Link
+                  href="/withdraw"
+                  className="block w-full text-center px-3 py-2 rounded-lg text-sm font-medium bg-[#1dbf73] text-white hover:bg-[#19a463] transition"
+                >
+                  Withdraw Funds
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/**order button  */}
           <Link
             href="/orders"
             className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors shadow-sm"
@@ -71,10 +134,11 @@ export default function GigsNavbar() {
 
             {/* Dropdown */}
             <div
-              className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 transform transition-all duration-200 origin-top-right ${isDropdownOpen
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-95 pointer-events-none"
-                }`}
+              className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 transform transition-all duration-200 origin-top-right ${
+                isDropdownOpen
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
             >
               <div className="px-4 py-3 border-b border-gray-50">
                 <p className="text-sm font-semibold text-gray-900">
