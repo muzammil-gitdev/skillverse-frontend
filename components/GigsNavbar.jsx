@@ -1,12 +1,29 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AccountContext } from "@/app/context/accountProvider";
 export default function GigsNavbar() {
   const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { setAccount, setUserId } = useContext(AccountContext);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+
+  // Handle search submit — navigates to /gigs?search=query
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const trimmed = searchQuery.trim();
+      if (trimmed) {
+        router.push(`/gigs?search=${encodeURIComponent(trimmed)}`);
+      } else {
+        router.push("/gigs");
+      }
+    }
+  };
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user_data");
     console.log(storedUser);
@@ -34,6 +51,9 @@ export default function GigsNavbar() {
             <input
               type="text"
               placeholder="Search for skills, services, or freelancers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
               className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-[#1dbf73]/10 focus:border-[#1dbf73] transition-all shadow-sm"
             />
             <svg

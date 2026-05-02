@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GigsNavbar from "@/components/GigsNavbar";
 import GigCard from "@/components/GigCard";
 import { AccountContext } from "../context/accountProvider";
@@ -13,6 +13,19 @@ export default function GigsPage() {
 
   const { user_id, setUserId, setAccount } = useContext(AccountContext);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+
+  // Filter gigs using .filter() based on the search query
+  const filteredGigs = gigs.filter((gig) => {
+    if (!searchQuery) return true; // no search → show all
+    const query = searchQuery.toLowerCase();
+    return (
+      gig.title.toLowerCase().includes(query) ||
+      gig.description?.toLowerCase().includes(query) ||
+      gig.userName?.toLowerCase().includes(query)
+    );
+  });
 
   useEffect(() => {
     const checkAuthAndFetch = async () => {
@@ -76,23 +89,35 @@ export default function GigsPage() {
       <main className="pt-32 pb-20 container-main">
         <div className="text-center py-12">
           <h1 className="heading-1 mb-4">
-            Find the perfect freelance services
+            {searchQuery
+              ? `Search results for "${searchQuery}"`
+              : "Find the perfect freelance services"}
           </h1>
           <p className="text-subtitle">
-            Browse through thousands of gigs created by talented freelancers.
+            {searchQuery
+              ? `${filteredGigs.length} gig${filteredGigs.length !== 1 ? "s" : ""} found`
+              : "Browse through thousands of gigs created by talented freelancers."}
           </p>
         </div>
 
         {loading ? (
           <p className="text-center text-gray-500">Loading gigs...</p>
-        ) : (
+        ) : filteredGigs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {gigs.map((gig) => (
+            {filteredGigs.map((gig) => (
               <GigCard key={gig.id} gig={gig} />
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-2xl font-semibold text-gray-700 mb-2">No gigs found</p>
+            <p className="text-gray-400">
+              Try searching with different keywords.
+            </p>
           </div>
         )}
       </main>
     </div>
   );
 }
+
