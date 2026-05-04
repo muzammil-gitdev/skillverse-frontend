@@ -15,9 +15,9 @@ export default function LoginPage() {
   useEffect(() => {
     // .get() retrieves the value of the 'error' key from the URL
     const errorMsg = searchParams.get("error");
-    if (errorMsg) {
-      setError(errorMsg);
-    }
+    const successMsg = searchParams.get("success");
+    if (errorMsg) setError(errorMsg);
+    if (successMsg) setSuccess(successMsg);
   }, [searchParams]);
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -130,12 +130,17 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Password
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Password
+                  </label>
+                  <Link href="/forgot-password" className="text-sm font-medium text-[#1dbf73] hover:text-[#19a463]">
+                    Forgot Password?
+                  </Link>
+                </div>
                 <input
                   id="password"
                   type="password"
