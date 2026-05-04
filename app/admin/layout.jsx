@@ -1,6 +1,15 @@
+"use client";
+
 import AdminSidebar from "@/components/AdminSidebar";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout({ children }) {
+    const pathname = usePathname();
+
+    if (pathname === "/admin/login") {
+        return <>{children}</>;
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             <div className="flex flex-1 mt-20">

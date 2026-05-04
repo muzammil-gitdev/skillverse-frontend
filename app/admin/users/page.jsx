@@ -6,6 +6,32 @@ import { getAllUsers } from "../../services/adminApi";
 export default function AllUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredUsers = users.filter((user) =>
+    user.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleExportCSV = () => {
+    const headers = ["Name", "Email", "Status", "Joined Date"];
+    const rows = filteredUsers.map((user) => [
+      `"${user.fullName || ""}"`,
+      `"${user.email || ""}"`,
+      `"${user.isVerified ? "Active" : "Pending"}"`,
+      `"${new Date(user.createdAt).toLocaleDateString()}"`,
+    ]);
+
+    const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "skillverse_users.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,13 +54,25 @@ export default function AllUsersPage() {
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
-      <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+      {/* HEADER & SEARCH */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-gray-200 gap-4">
         <h1 className="text-2xl font-bold text-gray-900">All Users</h1>
 
-        <button className="bg-[#1dbf73] hover:bg-[#179b5d] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
-          Export Data
-        </button>
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:border-[#1dbf73] focus:ring-[#1dbf73] focus:outline-none transition-colors"
+          />
+          <button 
+            onClick={handleExportCSV}
+            className="bg-[#1dbf73] hover:bg-[#179b5d] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm whitespace-nowrap"
+          >
+            Export Data
+          </button>
+        </div>
       </div>
 
       {/* TABLE */}
@@ -53,7 +91,7 @@ export default function AllUsersPage() {
             </thead>
 
             <tbody>
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr
                   key={user._id}
                   className="border-b border-gray-100 hover:bg-gray-50"
@@ -91,9 +129,6 @@ export default function AllUsersPage() {
 
                   {/* ACTIONS */}
                   <td className="py-4 px-6 text-right">
-                    <button className="text-[#1dbf73] font-medium mr-3">
-                      Edit
-                    </button>
                     <button className="text-red-500 font-medium">Ban</button>
                   </td>
                 </tr>
@@ -101,7 +136,7 @@ export default function AllUsersPage() {
             </tbody>
           </table>
 
-          {users.length === 0 && (
+          {filteredUsers.length === 0 && (
             <div className="p-6 text-center text-gray-500">No users found</div>
           )}
         </div>

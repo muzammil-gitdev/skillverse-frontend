@@ -1,9 +1,15 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    router.push("/admin/login");
+  };
 
   const navItems = [
     {
@@ -59,7 +65,7 @@ export default function AdminSidebar() {
           );
         })}
       </nav>
-      <div className="absolute bottom-8 w-64 px-4">
+      <div className="absolute bottom-8 w-64 px-4 space-y-2">
         <Link
           href="/"
           className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900 w-full"
@@ -79,6 +85,25 @@ export default function AdminSidebar() {
           </svg>
           <span className="truncate">Back to Home</span>
         </Link>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-red-600 hover:bg-red-50 hover:text-red-700 w-full text-left"
+        >
+          <svg
+            className="w-5 h-5 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          <span className="truncate">Logout</span>
+        </button>
       </div>
     </div>
   );
