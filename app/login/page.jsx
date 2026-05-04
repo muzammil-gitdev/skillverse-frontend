@@ -137,9 +137,6 @@ export default function LoginPage() {
                   >
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-sm font-medium text-[#1dbf73] hover:text-[#19a463]">
-                    Forgot Password?
-                  </Link>
                 </div>
                 <input
                   id="password"
@@ -152,7 +149,12 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-
+            <Link
+              href="/forgot-password"
+              className="text-sm font-medium text-[#1dbf73] hover:text-[#19a463]"
+            >
+              Forgot Password?
+            </Link>
             {error && <p className="text-red-500">{error}</p>}
             {success && <p className="text-green-500">{success}</p>}
 
