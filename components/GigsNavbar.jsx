@@ -10,7 +10,9 @@ export default function GigsNavbar() {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || "",
+  );
 
   // Handle search submit — navigates to /gigs?search=query
   const handleSearch = (e) => {
@@ -78,11 +80,24 @@ export default function GigsNavbar() {
           <div className="relative">
             {/* 💼 Wallet Button */}
             <button
-              onClick={() => setIsWalletOpen(!isWalletOpen)}
-              className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-[#1dbf73] border border-[#1dbf73] rounded-full hover:bg-[#19a463] transition-colors shadow-sm"
+              disabled={user?.isBanned}
+              onClick={() => {
+                if (!user?.isBanned) setIsWalletOpen(!isWalletOpen);
+              }}
+              className={`hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium rounded-full transition-colors shadow-sm
+    ${
+      user?.isBanned
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "text-white bg-[#1dbf73] hover:bg-[#19a463]"
+    }`}
             >
               Wallet
             </button>
+            {user?.isBanned && (
+              <div className="text-red-600 text-xs font-medium">
+                Your account is banned you can't able to perform action
+              </div>
+            )}
 
             {/* 🔽 Dropdown */}
             <div
@@ -132,8 +147,16 @@ export default function GigsNavbar() {
           </div>
           {/**order button  */}
           <Link
-            href="/orders"
-            className="hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors shadow-sm"
+            href={user?.isBanned ? "#" : "/orders"}
+            onClick={(e) => {
+              if (user?.isBanned) e.preventDefault();
+            }}
+            className={`hidden md:flex items-center justify-center px-4 py-2 text-sm font-medium border rounded-full transition-colors shadow-sm
+    ${
+      user?.isBanned
+        ? "text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed"
+        : "text-gray-700 bg-white border-gray-200 hover:bg-gray-50"
+    }`}
           >
             Orders
           </Link>
@@ -175,8 +198,15 @@ export default function GigsNavbar() {
                 View Profile
               </Link>
               <Link
-                href="/chat"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#1dbf73] transition-colors"
+                href={user?.isBanned ? "#" : "/chat"}
+                onClick={(e) => {
+                  if (user?.isBanned) e.preventDefault();
+                }}
+                className={`block px-4 py-2 text-sm transition-colors ${
+                  user?.isBanned
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-[#1dbf73]"
+                }`}
               >
                 Messages
               </Link>

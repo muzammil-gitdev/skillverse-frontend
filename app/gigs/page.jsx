@@ -110,7 +110,9 @@ export default function GigsPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-2xl font-semibold text-gray-700 mb-2">No gigs found</p>
+            <p className="text-2xl font-semibold text-gray-700 mb-2">
+              No gigs found
+            </p>
             <p className="text-gray-400">
               Try searching with different keywords.
             </p>
@@ -120,4 +122,3 @@ export default function GigsPage() {
     </div>
   );
 }
-

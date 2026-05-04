@@ -33,3 +33,8 @@ export const getAllUsers = async () => {
   const res = await ADMIN_API.get("/users");
   return res.data;
 };
+
+export const toggleBanUser = async (id) => {
+  const res = await ADMIN_API.patch(`/users/${id}/ban`);
+  return res.data;
+};

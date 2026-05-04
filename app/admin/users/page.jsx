@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../../services/adminApi";
+import { getAllUsers, toggleBanUser } from "../../services/adminApi";
 
 export default function AllUsersPage() {
   const [users, setUsers] = useState([]);
@@ -9,7 +9,7 @@ export default function AllUsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredUsers = users.filter((user) =>
-    user.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+    user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleExportCSV = () => {
@@ -21,10 +21,13 @@ export default function AllUsersPage() {
       `"${new Date(user.createdAt).toLocaleDateString()}"`,
     ]);
 
-    const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((e) => e.join(",")),
+    ].join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    
+
     const link = document.createElement("a");
     link.setAttribute("href", url);
     link.setAttribute("download", "skillverse_users.csv");
@@ -47,6 +50,18 @@ export default function AllUsersPage() {
 
     fetchUsers();
   }, []);
+  const handleBan = async (id) => {
+    try {
+      await toggleBanUser(id);
+
+      // update UI instantly
+      setUsers((prev) =>
+        prev.map((u) => (u._id === id ? { ...u, isBanned: !u.isBanned } : u)),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loading) {
     return <div className="p-6">Loading users...</div>;
@@ -66,7 +81,7 @@ export default function AllUsersPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:border-[#1dbf73] focus:ring-[#1dbf73] focus:outline-none transition-colors"
           />
-          <button 
+          <button
             onClick={handleExportCSV}
             className="bg-[#1dbf73] hover:bg-[#179b5d] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm whitespace-nowrap"
           >
@@ -110,15 +125,28 @@ export default function AllUsersPage() {
                   <td className="py-4 px-6">
                     <span
                       className={`flex items-center gap-2 ${
-                        user.isVerified ? "text-green-600" : "text-yellow-600"
+                        user.isBanned
+                          ? "text-red-600"
+                          : user.isVerified
+                            ? "text-green-600"
+                            : "text-yellow-600"
                       }`}
                     >
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          user.isVerified ? "bg-green-600" : "bg-yellow-600"
+                          user.isBanned
+                            ? "bg-red-600"
+                            : user.isVerified
+                              ? "bg-green-600"
+                              : "bg-yellow-600"
                         }`}
                       ></span>
-                      {user.isVerified ? "Active" : "Pending"}
+
+                      {user.isBanned
+                        ? "Banned"
+                        : user.isVerified
+                          ? "Active"
+                          : "Pending"}
                     </span>
                   </td>
 
@@ -129,7 +157,14 @@ export default function AllUsersPage() {
 
                   {/* ACTIONS */}
                   <td className="py-4 px-6 text-right">
-                    <button className="text-red-500 font-medium">Ban</button>
+                    <button
+                      onClick={() => handleBan(user._id)}
+                      className={`font-medium ${
+                        user.isBanned ? "text-green-600" : "text-red-500"
+                      }`}
+                    >
+                      {user.isBanned ? "Unban" : "Ban"}
+                    </button>
                   </td>
                 </tr>
               ))}
