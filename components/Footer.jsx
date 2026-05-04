@@ -110,7 +110,7 @@ export default function Footer() {
                         © 2025 SkillVerse Inc. All rights reserved.
                     </div>
                     <div className="flex items-center gap-6">
-                        <Link href="/admin" className="font-medium text-[#1dbf73] hover:text-[#179b5d] transition-colors">Admin Dashboard</Link>
+                        <Link href="/admin/login" className="font-medium text-[#1dbf73] hover:text-[#179b5d] transition-colors">Admin Dashboard</Link>
                         <Link href="#" className="hover:text-[#1dbf73] transition-colors">Privacy Policy</Link>
                         <Link href="#" className="hover:text-[#1dbf73] transition-colors">Terms of Service</Link>
                         <Link href="#" className="hover:text-[#1dbf73] transition-colors">Cookie Policy</Link>

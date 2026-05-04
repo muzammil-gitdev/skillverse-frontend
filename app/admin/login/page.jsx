@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { adminLogin } from "../../services/adminApi";
 
 export default function AdminLoginPage() {
-  const token = localStorage.getItem("adminToken");
+  const router = useRouter();
 
-  if (!token) {
-    window.location.href = "/admin/login";
-  }
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (token) {
+      router.push("/admin");
+    }
+  }, [router]);
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,7 +29,7 @@ export default function AdminLoginPage() {
 
       localStorage.setItem("adminToken", res.token);
 
-      window.location.href = "/admin";
+      router.push("/admin");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     } finally {
